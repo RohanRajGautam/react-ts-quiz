@@ -1,30 +1,45 @@
-import React from 'react'
+import React from 'react';
+// Types
+import { AnswerObject } from '../App';
+// Styles
+import { Wrapper, ButtonWrapper } from './QuestionCard.styles';
 
 type Props = {
-    question: string;
-    answers: string[];
-    callback: any;
-    userAnswer: any;
-    questionNm: number;
-    totalQuestions: number;
-}
+  question: string;
+  answers: string[];
+  callback: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  userAnswer: AnswerObject | undefined;
+  questionNm: number;
+  totalQuestions: number;
+};
 
-const QuestionCard: React.FC<Props> = ({question, answers, callback, userAnswer, questionNm, totalQuestions}) => {
-    return (
-        <div>
-            <p className="number">
-                Question: {questionNm} / {totalQuestions}
-            </p>
-            <p dangerouslySetInnerHTML={{__html: question}} />
-            <div>
-                {answers.map(answer => (
-                    <button disabled={userAnswer} onClick={callback}>
-                        <span dangerouslySetInnerHTML={{ __html: answer }} />
-                    </button>
-                ))}
-            </div>
-        </div>
-    )
-}
+const QuestionCard: React.FC<Props> = ({
+  question,
+  answers,
+  callback,
+  userAnswer,
+  questionNm,
+  totalQuestions,
+}) => (
+  <Wrapper>
+    <p className='number'>
+      Question: {questionNm} / {totalQuestions}
+    </p>
+    <p dangerouslySetInnerHTML={{ __html: question }} />
+    <div>
+      {answers.map((answer) => (
+        <ButtonWrapper
+          key={answer}
+          correct={userAnswer?.correctAnswer === answer}
+          userClicked={userAnswer?.answer === answer}
+        >
+          <button disabled={userAnswer ? true : false} value={answer} onClick={callback}>
+            <span dangerouslySetInnerHTML={{ __html: answer }} />
+          </button>
+        </ButtonWrapper>
+      ))}
+    </div>
+  </Wrapper>
+);
 
-export default QuestionCard
+export default QuestionCard;
